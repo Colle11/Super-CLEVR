@@ -45,8 +45,8 @@ def parse_args(parser, argv=None):
 def delete_object(obj):
     """ Delete a specified blender object """
     for o in bpy.data.objects:
-        o.select = False
-    obj.select = True
+        o.select_set(False)
+    obj.select_set(True)
     bpy.ops.object.delete()
 
 
@@ -118,14 +118,14 @@ def add_object(object_dir, name, obj_pth, scale, loc, theta=0):
     bpy.data.objects[added_name].name = new_name
 
     # Set the new object as active, then rotate, scale, and translate it
-    bpy.context.scene.objects.active = bpy.data.objects[new_name]
+    bpy.context.view_layer.objects.active = bpy.data.objects[new_name]
     bpy.context.object.rotation_euler[2] = theta / 180. * math.pi
     bpy.ops.transform.resize(value=(scale, scale, scale))
     
     ## Get the min z, and move the obj to the ground
     # # find the min z of the obj
     # zverts = []
-    current_obj = bpy.context.scene.objects.active
+    current_obj = bpy.context.view_layer.objects.active
     # # get all z coordinates of the vertices
     # for face in current_obj.data.polygons:
     #     verts_in_face = face.vertices[:]

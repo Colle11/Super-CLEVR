@@ -1,12 +1,18 @@
 cd image_generation
 
-CUDA_VISIBLE_DEVICES=5 \
-~/packages/blender-2.79b-linux-glibc219-x86_64/blender --background \
+# The CUDA_VISIBLE_DEVICES environment variable restricts your CUDA application
+# execution to a specific device or set of devices for debugging and testing.
+# To use it, set CUDA_VISIBLE_DEVICES to a comma-separated list of device IDs
+# to make only those devices visible to the application.
+# CUDA_VISIBLE_DEVICES=0 selects GPU 0 to perform any CUDA tasks.
+# See also https://developer.nvidia.com/blog/cuda-pro-tip-control-gpu-visibility-cuda_visible_devices/
+# for more details.
+CUDA_VISIBLE_DEVICES=0 \
+blender --background \
     --python super_restore_render_images.py -- \
     --start_idx 0 \
     --num_images 2 \
-    --use_gpu 1 \
-    --shape_dir ../../render-3d-segmentation/CGPart \
+    --shape_dir ../../CGPart \
     --model_dir data/save_models_1/ \
     --properties_json data/properties_cgpart.json \
     --margin 0.1 \
@@ -14,6 +20,8 @@ CUDA_VISIBLE_DEVICES=5 \
     --max_retries 150 \
     --width 640 \
     --height 480 \
+    --use_gpu 1 \
+    # Remove the arg '--use_gpu 1' to render images with the CPU.
 
 
     #--output_image_dir ../output/ver_texture_same/images/ \

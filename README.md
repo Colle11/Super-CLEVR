@@ -1,76 +1,58 @@
-# Super-CLEVR: A Virtual Benchmark to Diagnose Domain Robustness in Visual Reasoning
+# Super-CLEVR dataset generation
 
-[PDF](https://arxiv.org/pdf/2212.00259.pdf)
-[Slides](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/documents/Super-CLEVR.pdf)
-[Poster](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/documents/poster.pdf)
-[Video](https://www.youtube.com/watch?v=DWRp_70ypiA)
-<!-- (https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/obj_part_list/all_objects.html) -->
+## Michele Collevati
 
-------------
+This repo is a fork and rework of [Super-CLEVR: A Virtual Benchmark to Diagnose Domain Robustness in Visual Reasoning](https://github.com/Lizw14/Super-CLEVR) (viewed online on Saturday, 14/10/2023), which in turn is based on [CLEVR Dataset Generation](https://github.com/facebookresearch/clevr-dataset-gen) (viewed online on Thursday, 12/10/2023).  
 
-This is the homepage for the [CVPR 2023 highlight (top 2.5%)] paper: 
+This is the code to generate the Super-CLEVR dataset. Super-CLEVR contains images of vehicles (from [UDA-Part](https://qliu24.github.io/udapart/)) randomly placed in the scenes. The vehicles have part annotations and so the objects in the images can have distinct part attributes. [Here](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/obj_part_list/all_objects.html) is the list of objects and parts in Super-CLEVR scenes.  
 
-[Super-CLEVR: A Virtual Benchmark to Diagnose Domain Robustness in Visual Reasoning](https://arxiv.org/abs/2212.00259) 
-
-[Zhuowan Li](https://lizw14.github.io/), [Xingrui Wang](https://xingruiwang.github.io), [Elias Stengel-Eskin](https://esteng.github.io), [Adam Kortylewski](https://gvrl.mpi-inf.mpg.de/), [Wufei Ma](https://wufeim.github.io), [Benjamin Van Durme](https://www.cs.jhu.edu/~vandurme/), [Alan Yuille](https://www.cs.jhu.edu/~ayuille/).
-
-
-In this paper, we generate the Super-CLEVR dataset to systematically study the domain robustness of visual reasoning models on four factors: visual complexity, question redundancy, concept distribution, concept compositionality.
-
-------------
-## Dataset
-Super-CLEVR contains 30k images of vehicles (from [UDA-Part](https://qliu24.github.io/udapart/)) randomly placed in the scenes, with 10 question-answer pairs for each image. The vehicles have part annotations and so the objects in the images can have distinct part attributes. 
-
-Here [[link]](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/obj_part_list/all_objects.html) is the list of objects and parts in Super-CLEVR scenes. 
+You can use this code to render synthetic images like this:  
 
 <div align="center">
   <img src="images/github.png" width="800px">
 </div>
 
-The first 20k images and paired are used for training, the next 5k for validation and the last 5k for testing.
+All CLEVR dataset generation code was originally developed and tested on OSX and Ubuntu 16.04. The OS of Super-CLEVR's rework of the original CLEVR code is unknown. We have modified some parts of Super-CLEVR code according to our needs in Ubuntu 22.04.3 LTS.
 
-| Data                     |Download Link|
-|--------------------------|---|
-| images                   |[images.zip](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/to_be_released/images.zip)|
-| scenes                   |[superCLEVR_scenes.json](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/to_be_released/superCLEVR_scenes.json)|
-| questions                |[superCLEVR_questions_30k.json](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/to_be_released/superCLEVR_questions_30k.json)|
-| questions (- redundancy) |[superCLEVR_questions_30k_NoRedundant.json](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/to_be_released/superCLEVR_questions_30k_NoRedundant.json)|
-| questions (+ redundancy)  |[superCLEVR_questions_30k_AllRedundant.json](https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/to_be_released/superCLEVR_questions_30k_AllRedundant.json)|
-
-
---------------
 
 ## Dataset generation
-### To generate images:
-1. Install Blender 2.79b. This repo is highly built on the [CLEVR data generation code](https://github.com/facebookresearch/clevr-dataset-gen). Please refer to its `README` for additional details.
-2. Download [CGPart dataset](https://github.com/qliu24/render-3d-segmentation). 
-3. Then we want to preprocess the 3D models. To do this, you may need to modify the input and output paths in `image_generation/preprocess_cgpart.py`, then run `sh scripts/preprocess_cgpart.py`. 
-4. Next run `sh scripts/render_images.sh` to render images with GPUs. 
-5. After the images and corresponding scene files are generated, you can use `scripts/merge_scenes.py` to merge the scene files into one json file (as `output/superCLEVR_scenes.json`).
 
-10 example generated images and scenes are in `output/images` and `output/scenes`.
+We render synthetic images using [Blender](https://www.blender.org), outputting both rendered images as well as a JSON file containing ground-truth scene information for each image.
 
-### To generate questions
-- run `sh scripts/generate_questions.sh`. This bash file include several different scripts for generate questions with/without parts.
+1. Install [Blender 2.79b](https://download.blender.org/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2) and [Blender 3.6.4](https://download.blender.org/release/Blender3.6/).  
 
-- `output/superCLEVR_questions_5.json` and `outputsuperCLEVR_questions_part_5.json` are examples for questions generated using templates without and with parts respectively.
+   Add Blender to the environment `PATH` (only one version at a time, keep the other one commented out). Add the following command to `~/.bashrc` pointing to the directory with Blender’s binary:  
 
-- The argument `--remove_redundant` controls the level of redundancy in the generated questions.
+   ```
+   # Blender
+   export PATH="/path/to/blender/directory:$PATH"
+   ```
 
------------
-## Aknowledgements
-This repo is highly motivated by [CLEVR](https://github.com/facebookresearch/clevr-dataset-gen) and [render-3d-segmentation](https://github.com/qliu24/render-3d-segmentation).
+   Blender ships with its own installation of Python which is used to execute scripts that interact with Blender; you'll need to add the `image_generation` directory to Python path of Blender's bundled Python. The easiest way to do this is by adding a `.pth` file to the `site-packages` directory of Blender's Python, like this:  
 
---------------
-## Citation
-If you find this code useful in your research then please cite:
+   ```
+   echo $PWD/image_generation >> $BLENDER/$VERSION/python/lib/python3.5/site-packages/superclevr.pth
+   ```
 
-```
-@inproceedings{li2023super,
-  title={Super-CLEVR: A Virtual Benchmark to Diagnose Domain Robustness in Visual Reasoning},
-  author={Li, Zhuowan and Wang, Xingrui and Stengel-Eskin, Elias and Kortylewski, Adam and Ma, Wufei and Van Durme, Benjamin and Yuille, Alan L},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages={14963--14973},
-  year={2023}
-}
-```
+   where `$BLENDER` is the directory where Blender is installed and `$VERSION` is your Blender version.
+2. Download the [CGPart annotated 3D CAD models](https://cs.jhu.edu/~qliu24/CGPart/cgpart_3d.zip) and extract the `CGPart` folder to `../`.  
+
+   See also [https://github.com/qliu24/render-3d-segmentation](https://github.com/qliu24/render-3d-segmentation) for more details.
+3. Then, we want to preprocess the 3D models. To do this, run `sh scripts/preprocess_cgpart.sh` with Blender 2.79b (added to the environment `PATH`).
+4. Next run `sh scripts/render_images.sh` with Blender 3.6.4 (added to the environment `PATH`) to render images with the GPU. Modify its argument values as per your needs. The results are saved in the `output` folder.
+5. After the images and corresponding scene files are generated, run `python scripts/merge_scenes.py` to merge the scene files into one json file as `output/superCLEVR_scenes.json`. The file `output/superCLEVR_scenes.json` will contain ground-truth scene information for all newly rendered images.
+
+
+## Additional notes
+
+1. There is an error when Blender quits that shows the following error message:  
+   
+   ```
+   Error: Not freed memory blocks: 2, total unfreed memory 0.005035 MB
+   ```
+
+   This error has not been resolved but does not compromise the correct functioning of the code.  
+
+   See also [https://projects.blender.org/blender/blender/issues/44127](https://projects.blender.org/blender/blender/issues/44127) for more details.
+2. 2 example images and scenes are in `output/images` and `output/scenes`.
+3. Dataset scene files contain object bounding boxes.

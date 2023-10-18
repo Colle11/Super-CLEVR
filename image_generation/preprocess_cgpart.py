@@ -175,12 +175,14 @@ random.seed(2022)
 random.shuffle(colors)
 
 properties_json = 'data/properties_cgpart.json'
-label_dir = '/home/zhuowan/zhuowan/SuperClevr/render-3d-segmentation/CGPart/labels'
+label_dir = '../../CGPart/labels'
 color_name_to_rgba, size_mapping, obj_info = load_properties_json(properties_json, label_dir)
+
+os.makedirs('data/save_models_1', exist_ok=True)
 
 part_dict = {}
 for si, obj_name in enumerate(obj_info['info_pth']):
-    model_dir = '/home/zhuowan/zhuowan/SuperClevr/render-3d-segmentation/CGPart/'
+    model_dir = '../../CGPart/'
     model_id = obj_info['info_pth'][obj_name]
     shape_file = os.path.join(model_dir, 'models', model_id, 'models', 'model_normalized.obj')
     # if obj_name!='suv':

@@ -1,6 +1,7 @@
 import os
 import json
 from tqdm import tqdm
+import datetime
 
 def main():
     all_scene_paths = []
@@ -27,9 +28,10 @@ def main():
             all_scenes.append(json.load(f))
     
     all_scenes = sorted(all_scenes, key=lambda k: int(k['image_filename'].split('_')[-1].split('.')[0]))
+    dt = datetime.datetime.now()
     output = {
         'info': {
-            'date': "01/04/2022",
+            'date': dt.strftime("%x"),
             'version': "1.0",
             'split': "new",
             'license': "Creative Commons Attribution (CC-BY 4.0)",
