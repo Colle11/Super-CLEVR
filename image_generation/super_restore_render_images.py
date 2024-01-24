@@ -157,6 +157,11 @@ parser.add_argument('--render_min_bounces', default=8, type=int,
         help="The minimum number of bounces to use for rendering.")
 parser.add_argument('--render_max_bounces', default=8, type=int,
         help="The maximum number of bounces to use for rendering.")
+# parser.add_argument('--render_tile_size', default=256, type=int,
+#         help="The tile size to use for rendering. This should not affect the " +
+#                  "quality of the rendered image but may affect the speed; CPU-based " +
+#                  "rendering may achieve better performance using smaller tile sizes " +
+#                  "while larger tile sizes may be optimal for GPU-based rendering.")
 parser.add_argument('--clevr_scene_path', default=None,
         help="the path of CLEVR's scene file")
 
@@ -803,7 +808,7 @@ def add_random_objects(scene_struct, num_objects, args, camera, idx=-1):
                         "texture": texture
                         }
                 
-        objects[i]['parts'] = part_record
+            objects[i]['parts'] = part_record
 
     return objects, blender_objects
 
