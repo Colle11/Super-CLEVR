@@ -1,0 +1,2 @@
+../output/labels/superCLEVR_new_000001.txt
+../output/labels/superCLEVR_new_000000.txt
