@@ -1,0 +1,5 @@
+# _target_: ilp_knnt.data.dataloader.ClevrDataset
+data_root_dir: ../output
+
+cache_file_name: cache_file_list.txt
+image_size: [640, 480]
